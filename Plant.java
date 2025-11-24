@@ -33,10 +33,33 @@ public class Plant {
 		this.setAll(original.name, original.tempFahrenheit, original.uses);
 	}
 
-	//TODO: Step 1 = CSV string constructor
+	//STEP 1 CSV String Constructor
+	public Plant(String csvLine) throws IllegalArgumentException {
+	// check CSV line
+	if (csvLine == null || csvLine.length() == 0) {
+		throw new IllegalArgumentException("Invalid CSV line");
+	}
+		
+	// separate CSV line at commas
+	String[] parts = csvLine.split(",");
+	// check for 3 parts
+	if (parts.length != 3) {
+		throw new IllegalArgumentException("Invalid CSV format. Need 3 comma separated values.");
+	}
 
-
-
+	// Parse temperature from String to double
+	double temp;
+	try {
+		temp = Double.parseDouble(parts[1]);
+	} catch (NumberFormatException e) {
+		throw new IllegalArgumentException("invalid temperature value in CSV" + parts[1]);
+	}
+		
+		//use setAll to set values and check for errors
+		if (!this.setAll(parts[0], temp, parts[2])) {
+			throw new IllegalArgumentException("invalid values in CSV line" + csvLine);
+		}
+	}
 
 	// MUTATORS/SETTERS
 	public boolean setName(String name) {
